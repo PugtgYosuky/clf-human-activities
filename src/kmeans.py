@@ -1,6 +1,8 @@
 import pandas as pd
 from utils import normalize_data
 import numpy as np
+from sklearn.cluster import KMeans as lib_kmeans 
+import matplotlib.pyplot as plt
 
 class KMeans:
 
@@ -30,3 +32,21 @@ class KMeans:
 
     def get_distances(self):
         return self.distances.min(axis=1)
+
+def best_number_clusters(data, threshold=0.75, init=3, stop=20):
+    k_distances = []
+    best_k = stop
+    for k in range(init, stop, 1):
+        inertia = lib_kmeans(n_clusters=k).fit(data).inertia_
+        if k != init and inertia / k_distances[-1] > threshold and best_k == stop:
+            best_k = k - 1
+        k_distances += [inertia]
+
+    plt.figure()
+    x_values = [ (i + init) for i in range(len(k_distances))]
+    plt.plot(x_values, k_distances, 'r*')
+    plt.xlabel('Number of clusters')
+    plt.ylabel('Sum distances to centroids')
+    plt.title('Relations between clusters and centroids')
+    plt.show()
+    return best_k # best value

@@ -1,39 +1,35 @@
 import pandas as pd
 import numpy as np
 import random 
+import matplotlib.pyplot as plt
 
-class ZScore:
-    def __init__(self, data, k=3.5):
-        self.data = data
-        self.k = k
-        self.calculate_zscore()
-    def calculate_zscore(self):
-        self.z = (self.data - self.data.mean()) / self.data.std()
-    def outliers_indexes(self):
-        self.calculate_zscore()
-        self.indexes= self.z > self.k
-        return self.indexes
+def calculate_zscore(data):
+    mean = data.mean()
+    std = data.std()
+    z = (data - mean) / std
+    return z
 
-    def calculate_density(self):
-        outliers = self.outliers_indexes()
-        density = outliers.sum() / self.data.count()
-        print(f'Density: {density}')
-        return density
+def calculate_outliers_indexes(data, k):
+    z = calculate_zscore(data)
+    outliers = (z > k) | (z < -k) # boolean pandas series
+    return outliers
 
-    def add_outliers(self, percentage, z=1):
-        outliers_density = self.calculate_density()
-        if percentage > outliers_density:
-            indexes_non_outliers = pd.Series(self.indexes.index[self.indexes == False])
-            number_values = int((percentage - outliers_density) * self.data.count())
-            selected_values_to_change = pd.Series(indexes_non_outliers).sample(number_values)
-            print(len(self.data))
-            print(len(selected_values_to_change))
-            mean = self.data.mean()
-            std = self.data.std()
-            transform_data = self.data.copy()
-            mean = self.data.mean()
-            std = self.data.std()
-            transform_data[selected_values_to_change] = transform_data[selected_values_to_change].apply(
-                lambda x: (mean + random.choice([1, -1])*self.k*(std+np.random.uniform(0, z)))
-                )
-            return transform_data
+def calculate_zscore_density(data, outliers):
+    density = outliers.sum() / data.count()
+    print(f'Density - activity {activity}: {density * 100} %')
+    return density # decimal value
+
+def plot_zscore_outliers(data, k, variable):
+    plt.figure()
+    for activity in data['activity'].unique():
+        activity_data = data[data['activity'] == activity][variable]
+        outliers_indexes = calculate_outliers_indexes(activity_data, k)
+        outliers = activity_data[outliers_indexes]
+        x_data = np.ones_like(activity_data) * activity
+        x_outliers = np.ones_like(outliers) * activity
+        plt.plot(x_data, activity_data, 'b*')
+        plt.plot(x_outliers, outliers, 'r*')
+    plt.title(f'Z-Score outliers - variable {variable}, k={k}')
+    plt.xticks([activity for activity in data['activity'].unique()])
+    plt.xlabel('Activity')
+    plt.show()

@@ -20,7 +20,8 @@ def boxplot_features(data, var=0, title=None):
 def plot_points_and_outliers(data, outliers, title=None):
     #outliers = calculate_zscore(data, k).to_numpy()
     plt.figure()
-    data.plot(style='b*', markerfacecolor='r', markevery=outliers)
+    data.plot(style='b*')
+    # data.plot(style='b*', markerfacecolor='r', markevery=outliers)
     plt.show() 
 
 def plot_kmeans_clusters(data, labels, variable='variable'):

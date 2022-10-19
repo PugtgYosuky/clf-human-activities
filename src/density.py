@@ -18,10 +18,6 @@ def calculate_density(data, activity=None):
     magnetometer_outliers = data[data['magnetometer_module'] < (first_quantile_magnetometer - 1.5*magnetometer_range)]['magnetometer_module'].count() + data[data['magnetometer_module'] > (third_quantile_magnetometer + 1.5* magnetometer_range)]['magnetometer_module'].count()
 
     data_size = data['magnetometer_module'].count()
-    print(f'ACC: {accelerometer_outliers}')
-    print(f'GYR: {gyroscope_outliers}')
-    print(f'MAG: {magnetometer_outliers}')
-    print(f'Total: {data_size}')
 
     accelerometer_density = accelerometer_outliers / data_size
     gyroscope_density = gyroscope_outliers / data_size
