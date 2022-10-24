@@ -1,2 +1,6 @@
 .ipynb_checkpoints
 __pycache__
+labels_acc.csv
+labels_gyro.csv
+labels_mag.csv
+dataset.csv
