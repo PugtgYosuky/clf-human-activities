@@ -1,6 +1,8 @@
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
-def calculate_density(data, activity=None):
+def calculate_density(data, density_col):
     first_quantile_accelerometer = data['accelerometer_module'].quantile(0.25)
     third_quantile_accelerometer = data['accelerometer_module'].quantile(0.75)
     first_quantile_gyroscope = data['gyroscope_module'].quantile(0.25)
@@ -22,14 +24,31 @@ def calculate_density(data, activity=None):
     accelerometer_density = accelerometer_outliers / data_size
     gyroscope_density = gyroscope_outliers / data_size
     magnetometer_density = magnetometer_outliers / data_size
-    print(f'{activity} Accelerometer density: {accelerometer_density * 100}') 
-    print(f'{activity} Gyroscope density: {gyroscope_density * 100}') 
-    print(f'{activity} Magnetometer density: {magnetometer_density * 100}') 
 
+    density_col['accelerometer_module'] = accelerometer_density * 100
+    density_col['gyroscope_module'] = gyroscope_density * 100
+    density_col['magnetometer_module'] = magnetometer_density * 100
 
 def calculate_density_by_activity(data, activities_labels):
     activities = data['activity'].unique()
-    print(f'Activities: {len(activities)}')
+    arr = np.zeros((3, len(activities)))
+    densities = pd.DataFrame(arr, columns=activities_labels, index=['accelerometer_module', 'gyroscope_module', 'magnetometer_module'])
     for activity in activities:
         activity_data = data[data['activity'] == activity]
-        calculate_density(activity_data, activity=f'{activities_labels[activity]}-{activity}')
+        calculate_density( data[data['activity'] == activity], densities[activities_labels[activity -1]])
+
+    return densities
+
+def plot_densities(densities):
+    plt.figure()
+    ax = densities.loc['accelerometer_module'].plot(kind='barh', ylabel='Percentage')
+    ax.set_title('Density of outliers of each activity - accelerometer sensor')
+    plt.show()
+    plt.figure()
+    ax = densities.loc['gyroscope_module'].plot(kind='barh', ylabel='Percentage')
+    ax.set_title('Density of outliers of each activity - gyroscope sensor')
+    plt.show()
+    plt.figure()
+    ax = densities.loc['magnetometer_module'].plot(kind='barh',ylabel='Percentage')
+    ax.set_title('Density of outliers of each activity - magnetometer sensor')
+    plt.show()

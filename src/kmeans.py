@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 class KMeans:
 
-    def __init__(self, k=3, max_iterations=100):
+    def __init__(self, k=3, max_iterations=150):
         self.k = k
         self.max_iterations = max_iterations
 
@@ -33,7 +33,19 @@ class KMeans:
     def get_distances(self):
         return self.distances.min(axis=1)
 
-def best_number_clusters(data, threshold=0.75, init=3, stop=20):
+    def calculate_error(self):
+        return np.sum(self.get_distances())
+
+    def get_outliers(self, threshold):
+        return self.get_distances() > threshold
+
+    def get_labels_with_outliers(self, threshold):
+        labels = self.labels.copy().astype('str')
+        outliers = self.get_outliers(threshold)
+        labels[outliers] = 'outlier'
+        return labels
+
+def best_number_clusters(data, threshold=0.85, init=3, stop=20):
     k_distances = []
     best_k = stop
     for k in range(init, stop, 1):

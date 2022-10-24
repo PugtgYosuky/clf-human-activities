@@ -14,22 +14,29 @@ def calculate_outliers_indexes(data, k):
     outliers = (z > k) | (z < -k) # boolean pandas series
     return outliers
 
-def calculate_zscore_density(data, outliers):
+def calculate_zscore_density(data, outliers, activity):
     density = outliers.sum() / data.count()
-    print(f'Density - activity {activity}: {density * 100} %')
+    # print(f'Density - activity {activity}: {density * 100} %')
     return density # decimal value
 
-def plot_zscore_outliers(data, k, variable):
-    plt.figure()
-    for activity in data['activity'].unique():
-        activity_data = data[data['activity'] == activity][variable]
-        outliers_indexes = calculate_outliers_indexes(activity_data, k)
-        outliers = activity_data[outliers_indexes]
-        x_data = np.ones_like(activity_data) * activity
-        x_outliers = np.ones_like(outliers) * activity
-        plt.plot(x_data, activity_data, 'b*')
-        plt.plot(x_outliers, outliers, 'r*')
-    plt.title(f'Z-Score outliers - variable {variable}, k={k}')
-    plt.xticks([activity for activity in data['activity'].unique()])
-    plt.xlabel('Activity')
+def plot_zscore_outliers(data, variable):
+    ks = [3, 3.5, 4]
+    i = 1
+    f = plt.figure(figsize=(20,15))
+    for k in ks:
+        ax = f.add_subplot(1,3,i)
+        for activity in data['activity'].unique():
+            activity_data = data[data['activity'] == activity][variable]
+            outliers_indexes = calculate_outliers_indexes(activity_data, k)
+            calculate_zscore_density(activity_data, outliers_indexes, activity)
+            outliers = activity_data[outliers_indexes]
+            x_data = np.ones_like(activity_data) * activity
+            x_outliers = np.ones_like(outliers) * activity
+            ax.plot(x_data, activity_data, 'b*')
+            ax.plot(x_outliers, outliers, 'r*')
+        ax.set_title(f'Z-Score outliers - variable {variable}, k={k}')
+        ax.set_xticks([activity for activity in data['activity'].unique()])
+        ax.set_xlabel('Activity')
+        
+        i += 1
     plt.show()

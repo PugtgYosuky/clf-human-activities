@@ -14,7 +14,10 @@ def boxplot_features(data, var=0, title=None):
     variables = {0: 'accelerometer_module', 1: 'gyroscope_module', 2: 'magnetometer_module'} 
     plt.figure(figsize=(21, 10))
     data.boxplot(column=[variables[var]], by='activity')
-    plt.title(variables[var])
+    if title is not None:
+        plt.title(f'{title} - {variables[var]}')
+    else:
+        plt.title(variables[var])
     plt.show()
 
 def plot_points_and_outliers(data, outliers, title=None):
@@ -24,10 +27,10 @@ def plot_points_and_outliers(data, outliers, title=None):
     # data.plot(style='b*', markerfacecolor='r', markevery=outliers)
     plt.show() 
 
-def plot_kmeans_clusters(data, labels, variable='variable'):
-    scatter = go.Scatter3d( x=data['accelerometer_module'],
-                            y=data['gyroscope_module'],
-                            z=data['magnetometer_module'],
+def plot_kmeans_clusters(data, labels, k, variable='variable'):
+    scatter = go.Scatter3d( x=data['accelerometer_x'], 
+                            y=data['accelerometer_y'],
+                            z=data['accelerometer_z'],
                             mode='markers',
                             marker=dict(color = labels, size= 2, 
                             line=dict(color= 'black',width = 10))
@@ -42,17 +45,19 @@ def plot_kmeans_clusters(data, labels, variable='variable'):
     fig = go.Figure(data=[scatter], layout=layout)
     fig.show()
     
-    """
-        for cluster in range(clusters):
-        ax.scatter(data[kmeans.labels_ == cluster]['accelerometer_module'],
-            data[kmeans.labels_ == cluster]['gyroscope_module'],
-            data[kmeans.labels_ == cluster]['magnetometer_module'],
-            label=f'cluster {cluster}'
-            )
+    
+#     fig = plt.figure(figsize = (15,15))
+#     ax = fig.add_subplot(111, projection='3d')
+#     for label in labels.unique():
+#         ax.scatter(data[labels == label][f'{variable}_x'],
+#             data[labels == label][f'{variable}_y'],
+#             data[labels== label][f'{variable}_z'],
+#             label=f'cluster {label}'
+#             )
 
-        ax.set_xlabel('accelerometer_module')
-        ax.set_ylabel('gyroscope_module')
-        ax.set_zlabel('magnetometer_module')
-        ax.legend()
-        plt.show()
-    """
+#     ax.set_xlabel(f'{variable}_x')
+#     ax.set_ylabel(f'{variable}_y')
+#     ax.set_zlabel(f'{variable}_z')
+#     plt.title(f'Clusters KMeans: {k} clusters - {variable} vector')
+#     ax.legend()
+#     plt.show()
