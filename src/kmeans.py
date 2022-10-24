@@ -22,6 +22,8 @@ class KMeans:
             else:
                 self.centroids = new_centroids
 
+        self.inertia = np.sum(self.get_distances())
+
         return self.labels
 
     def update_clusters(self):
