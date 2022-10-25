@@ -47,11 +47,13 @@ class KMeans:
         labels[outliers] = 'outlier'
         return labels
 
-def best_number_clusters(data, threshold=0.85, init=3, stop=20):
+def best_number_clusters(data, threshold=0.85, init=1, stop=10):
     k_distances = []
     best_k = stop
     for k in range(init, stop, 1):
-        inertia = lib_kmeans(n_clusters=k).fit(data).inertia_
+        kmeans = KMeans(k)
+        values = kmeans.predict(data)
+        inertia = kmeans.inertia #lib_kmeans(n_clusters=k).fit(data).inertia_
         if k != init and inertia / k_distances[-1] > threshold and best_k == stop:
             best_k = k - 1
         k_distances += [inertia]

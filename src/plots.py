@@ -28,36 +28,36 @@ def plot_points_and_outliers(data, outliers, title=None):
     plt.show() 
 
 def plot_kmeans_clusters(data, labels, k, variable='variable'):
-    scatter = go.Scatter3d( x=data['accelerometer_x'], 
-                            y=data['accelerometer_y'],
-                            z=data['accelerometer_z'],
-                            mode='markers',
-                            marker=dict(color = labels, size= 2, 
-                            line=dict(color= 'black',width = 10))
-    )
-    layout = go.Layout(scene={  'xaxis' : {'title': f'{variable}_x'},
-                                'yaxis' : {'title' : f'{variable}_y'},
-                                'zaxis' : {'title' : f'{variable}_z'}       
-    }, margin={'l': 0, 'r':0}, height = 800,width = 800)
+    # scatter = go.Scatter3d( x=data['accelerometer_x'], 
+    #                         y=data['accelerometer_y'],
+    #                         z=data['accelerometer_z'],
+    #                         mode='markers',
+    #                         marker=dict(color = labels, size= 2, 
+    #                         line=dict(color= 'black',width = 10))
+    # )
+    # layout = go.Layout(scene={  'xaxis' : {'title': f'{variable}_x'},
+    #                             'yaxis' : {'title' : f'{variable}_y'},
+    #                             'zaxis' : {'title' : f'{variable}_z'}       
+    # }, margin={'l': 0, 'r':0}, height = 800,width = 800)
 
     
 
-    fig = go.Figure(data=[scatter], layout=layout)
-    fig.show()
+    # fig = go.Figure(data=[scatter], layout=layout)
+    # fig.show()
     
     
-#     fig = plt.figure(figsize = (15,15))
-#     ax = fig.add_subplot(111, projection='3d')
-#     for label in labels.unique():
-#         ax.scatter(data[labels == label][f'{variable}_x'],
-#             data[labels == label][f'{variable}_y'],
-#             data[labels== label][f'{variable}_z'],
-#             label=f'cluster {label}'
-#             )
+    fig = plt.figure(figsize = (15,15))
+    ax = fig.add_subplot(111, projection='3d')
+    for label in labels.unique():
+        ax.scatter(data[labels == label][f'{variable}_x'],
+            data[labels == label][f'{variable}_y'],
+            data[labels== label][f'{variable}_z'],
+            label=f'cluster {label}'
+            )
 
-#     ax.set_xlabel(f'{variable}_x')
-#     ax.set_ylabel(f'{variable}_y')
-#     ax.set_zlabel(f'{variable}_z')
-#     plt.title(f'Clusters KMeans: {k} clusters - {variable} vector')
-#     ax.legend()
-#     plt.show()
+    ax.set_xlabel(f'{variable}_x')
+    ax.set_ylabel(f'{variable}_y')
+    ax.set_zlabel(f'{variable}_z')
+    plt.title(f'Clusters KMeans: {k} clusters - {variable} vector')
+    ax.legend()
+    plt.show()
