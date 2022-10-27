@@ -19,8 +19,11 @@ def calculate_zscore_density(data, outliers, activity):
     # print(f'Density - activity {activity}: {density * 100} %')
     return density # decimal value
 
-def plot_zscore_outliers(data, variable):
-    ks = [3, 3.5, 4]
+def plot_zscore_outliers(data, variable, k_value=None):
+    if k_value :
+        ks = [k_value]
+    else:
+        ks = [3, 3.5, 4]
     i = 1
     f = plt.figure(figsize=(20,15))
     for k in ks:
@@ -28,7 +31,8 @@ def plot_zscore_outliers(data, variable):
         for activity in data['activity'].unique():
             activity_data = data[data['activity'] == activity][variable]
             outliers_indexes = calculate_outliers_indexes(activity_data, k)
-            calculate_zscore_density(activity_data, outliers_indexes, activity)
+            density = calculate_zscore_density(activity_data, outliers_indexes, activity)
+            print('Density: ', density * 100)
             outliers = activity_data[outliers_indexes]
             x_data = np.ones_like(activity_data) * activity
             x_outliers = np.ones_like(outliers) * activity
