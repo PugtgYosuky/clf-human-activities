@@ -27,6 +27,23 @@ def plot_points_and_outliers(data, outliers, title=None):
     # data.plot(style='b*', markerfacecolor='r', markevery=outliers)
     plt.show() 
 
+def plot_3d(data, labels, title):
+    fig = plt.figure(figsize = (15,15))
+    ax = fig.add_subplot(111, projection='3d')
+    for label in labels.unique():
+        ax.scatter(data[labels == label][data.columns[0]],
+            data[labels == label][data.columns[1]],
+            data[labels== label][data.columns[2]],
+            label=f'cluster {label}'
+            )
+            
+    ax.set_xlabel(data.columns[0])
+    ax.set_ylabel(data.columns[1])
+    ax.set_zlabel(data.columns[2])
+    plt.title(title)
+    ax.legend()
+    plt.show()
+
 def plot_kmeans_clusters(data, labels, k, variable='variable'):
     # scatter = go.Scatter3d( x=data['accelerometer_x'], 
     #                         y=data['accelerometer_y'],
