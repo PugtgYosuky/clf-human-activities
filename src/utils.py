@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, minmax_scale
 
 def normalize_data(dataset, feature_range=(0, 1)):
     data = dataset.copy()
