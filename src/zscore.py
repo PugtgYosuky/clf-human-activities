@@ -43,3 +43,27 @@ def plot_zscore_outliers(data, variable, k_value=None):
         i += 1
     plt.show()
 
+def inject_outliers(quantity, data, outliers_indexes, k,  z=1):
+    non_outliers = pd.Series(outliers_indexes[outliers_indexes == False].index)
+    indexes = non_outliers.sample(quantity, random_state=42)
+    data[indexes] = data[indexes].apply(lambda x :  (data.mean() + k * random.choice([1, -1]) * (data.std() + np.random.uniform(0, z))))
+    return data
+
+def add_outliers(percentage, k, data):
+    data = data.copy()
+    indexes = calculate_outliers_indexes(data, k)
+    density = calculate_density(indexes)
+    step = 1000
+    count = 0
+    quantity = int((percentage - density) * len(data))
+    print('Quantity:', quantity)
+    while density < percentage and count < quantity + step:
+        data = inject_outliers(step, data, indexes, k)
+        indexes = calculate_outliers_indexes(data, k)
+        density = calculate_density(indexes)
+        print(density)
+        count += step
+    return data, density
+
+
+

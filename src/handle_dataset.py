@@ -58,6 +58,9 @@ def get_all_data(data_path):
     data.to_csv(save_path, index=False)
     return data
 
+def get_device_data(data, device_id):
+    return data[data['device_id'] == device_id]
+
 
 def append_metrics(dataset):
     data = dataset.copy()
