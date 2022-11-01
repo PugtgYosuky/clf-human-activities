@@ -52,3 +52,7 @@ def plot_densities(densities):
     ax = densities.loc['magnetometer_module'].plot(kind='barh',ylabel='Percentage')
     ax.set_title('Density of outliers of each activity - magnetometer sensor')
     plt.show()
+
+def calculate_common_outliers(outliers_a, outliers_b):
+    common = outliers_a & outliers_b
+    return np.sum(common) / np.maximum(np.sum(outliers_a), np.sum(outliers_b))

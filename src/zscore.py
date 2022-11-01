@@ -14,10 +14,8 @@ def calculate_outliers_indexes(data, k):
     outliers = (z > k) | (z < -k) # boolean pandas series
     return outliers
 
-def calculate_zscore_density(data, outliers, activity):
-    density = outliers.sum() / data.count()
-    # print(f'Density - activity {activity}: {density * 100} %')
-    return density # decimal value
+def calculate_density(outliers):
+    return outliers.sum() / len(outliers)
 
 def plot_zscore_outliers(data, variable, k_value=None):
     if k_value :
@@ -31,7 +29,7 @@ def plot_zscore_outliers(data, variable, k_value=None):
         for activity in data['activity'].unique():
             activity_data = data[data['activity'] == activity][variable]
             outliers_indexes = calculate_outliers_indexes(activity_data, k)
-            density = calculate_zscore_density(activity_data, outliers_indexes, activity)
+            density = calculate_density(outliers_indexes)
             print('Density: ', density * 100)
             outliers = activity_data[outliers_indexes]
             x_data = np.ones_like(activity_data) * activity
@@ -44,3 +42,4 @@ def plot_zscore_outliers(data, variable, k_value=None):
         
         i += 1
     plt.show()
+
