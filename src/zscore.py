@@ -17,6 +17,20 @@ def calculate_outliers_indexes(data, k):
 def calculate_density(outliers):
     return outliers.sum() / len(outliers)
 
+def calculate_zscore_densities(data, activities_labels, k = 3):
+    activities = data['activity'].unique()
+    arr = np.zeros((3, len(activities)))
+    densities = pd.DataFrame(arr, columns=activities_labels, index=['accelerometer_module', 'gyroscope_module', 'magnetometer_module'])
+    for variable in ['accelerometer_module', 'gyroscope_module', 'magnetometer_module']:
+        for activity in activities:
+            activity_data = data[data['activity'] == activity][variable]
+            outliers_indexes = calculate_outliers_indexes(activity_data, k)
+            density = calculate_density(outliers_indexes)
+            densities[activities_labels[activity-1]][variable]= density * 100
+
+    return densities
+
+
 def plot_zscore_outliers(data, variable, k_value=None):
     if k_value :
         ks = [k_value]
@@ -29,8 +43,6 @@ def plot_zscore_outliers(data, variable, k_value=None):
         for activity in data['activity'].unique():
             activity_data = data[data['activity'] == activity][variable]
             outliers_indexes = calculate_outliers_indexes(activity_data, k)
-            density = calculate_density(outliers_indexes)
-            print('Density: ', density * 100)
             outliers = activity_data[outliers_indexes]
             x_data = np.ones_like(activity_data) * activity
             x_outliers = np.ones_like(outliers) * activity
@@ -39,8 +51,8 @@ def plot_zscore_outliers(data, variable, k_value=None):
         ax.set_title(f'Z-Score outliers - variable {variable}, k={k}')
         ax.set_xticks([activity for activity in data['activity'].unique()])
         ax.set_xlabel('Activity')
-        
         i += 1
+
     plt.show()
 
 def inject_outliers(quantity, data, outliers_indexes, k,  z=1):

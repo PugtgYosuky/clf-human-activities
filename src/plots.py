@@ -7,17 +7,13 @@ import plotly.offline as py
 import plotly.io as pio
 from mpl_toolkits.mplot3d import Axes3D
 
-def boxplot_features(data, var=0, title=None):
-    """
-    :param var: different activities; values:  0 = accelerometer_module, 1 = gyroscope_module, 2=magnetometer_module
-    """
-    variables = {0: 'accelerometer_module', 1: 'gyroscope_module', 2: 'magnetometer_module'} 
+def boxplot_features(data, variable, title=None):
     plt.figure(figsize=(21, 10))
-    data.boxplot(column=[variables[var]], by='activity')
+    data.boxplot(column=[variable], by='activity')
     if title is not None:
-        plt.title(f'{title} - {variables[var]}')
+        plt.title(f'{title} - {variable}')
     else:
-        plt.title(variables[var])
+        plt.title(variable)
     plt.show()
 
 def plot_points_and_outliers(data, outliers, title=None):

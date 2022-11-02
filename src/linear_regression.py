@@ -18,7 +18,6 @@ def predict(data, p, a=None):
     """ receives only the previous points and returns the predicted value based on the previous p points"""
     size = len(data)
     if a is None:
-        print('calculate_betas')
         a = calculate_alphas(data, p)
     prev_values = np.ones(p+1)
     prev_values[1:] = data[:size-p-1:-1]
@@ -31,29 +30,27 @@ def rmse (y_real, y_pred):
     mse = np.square(y_real - y_pred).mean()
     return np.sqrt(mse)
 
-def define_best_p_value(data, index_first_outlier, min_p_value=10, max_step=100, step=100):
+def define_best_p_value(data, pred_index, min_p_value=10, max_step=100, step=100):
     """Leave one-out technique to determine the best number of previous values to predict a value"""
     p_possible_values = range(min_p_value, max_step, step)
-    real_value = data[index_first_outlier]
+    real_value = data[pred_index]
     errors = []
     for p in p_possible_values:
-        d = data[:index_first_outlier]
+        d = data[:pred_index]
         y_pred = predict(d, p)
-        print('P: ', p)
-        print('Real: ', real_value)
-        print('Pred: ', y_pred)
+        # print('P: ', p)
+        # print('Real: ', real_value)
+        # print('Pred: ', y_pred)
         errors.append(rmse(real_value, y_pred))
-
-    
     plt.figure()
     plt.plot(p_possible_values, errors, '*')
 
-    for i in range(len(errors)):
-        plt.annotate(errors[i], (p_possible_values[i], errors[i] + 0.2))
+    # for i in range(len(errors)):
+    #     plt.annotate(errors[i], (p_possible_values[i], errors[i] + 0.2))
 
     plt.xlabel('Previous p values')
     plt.ylabel('RMSE')
-    plt.title('Errors obtained with RMSE using the Leave-one-out technique to determine the best p value')
+    plt.title(f'Errors obtained with RMSE using the Leave-one-out technique to determine the best p value')
     plt.show()
     
     return p_possible_values[np.array(errors).argmin()], errors
