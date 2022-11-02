@@ -15,7 +15,8 @@ class KMeans:
         self.centroids = self.data.sample(n=self.k, random_state=42, ignore_index=True)
 
         for i in range(self.max_iterations):
-            print(f'Iteration: {i}')
+            if i % 10 == 0:
+                print(f'Iteration: {i}')
             new_centroids = self.update_clusters()
             if self.centroids.equals(new_centroids):
                 break
