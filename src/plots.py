@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import plotly.graph_objs as go
-from plotly import tools
-from plotly.subplots import make_subplots
-import plotly.offline as py
-import plotly.io as pio
-from mpl_toolkits.mplot3d import Axes3D
+# import plotly.graph_objs as go
+# from plotly import tools
+# from plotly.subplots import make_subplots
+# import plotly.offline as py
+# import plotly.io as pio
+# from mpl_toolkits.mplot3d import Axes3D
 
 
 def boxplot_features(data, variable, title=None):
