@@ -95,8 +95,9 @@ def plot_results(data, predicted, outliers_indexes):
     @param outliers_indexes: indexes of the real value to predict
     """
     # x_axis = np.arange(len(data))
-    plt.scatter(outliers_indexes, data[outliers_indexes], s=4, label='real values')
-    plt.scatter(outliers_indexes, predicted, color='r', s=4, label='predicted values')
+    plt.scatter(range(len(data)), data, s=4, label='Original data')
+    plt.scatter(outliers_indexes, data[outliers_indexes], color='g', s=4, label='Outliers')
+    plt.scatter(outliers_indexes, predicted[outliers_indexes], color='r', s=4, label='Predicted values')
     plt.legend()
     plt.xlabel('Index')
     plt.ylabel('Value')
