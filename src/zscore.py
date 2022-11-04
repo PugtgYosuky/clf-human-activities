@@ -128,6 +128,6 @@ def add_outliers(percentage, k, data):
         data = inject_outliers(step, data, indexes, k)
         indexes = calculate_outliers_indexes(data, k)
         density = calculate_density(indexes)
-        print(density)
+        print(density * 100, '%')
         count += step
     return data, density
