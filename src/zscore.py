@@ -122,7 +122,7 @@ def add_outliers(percentage, k, data):
     count = 0
     quantity = int((percentage - density) * len(data))
     print('Quantity:', quantity)
-    # add outliers until it reaches tghe desired percentage of outliers or until it reaches the maximum number of
+    # add outliers until it reaches the desired percentage of outliers or until it reaches the maximum number of
     # outliers to add
     while density < percentage and count < quantity + step:
         data = inject_outliers(step, data, indexes, k)
