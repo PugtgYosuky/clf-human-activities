@@ -107,7 +107,7 @@ def inject_outliers(quantity, data, outliers_indexes, k, z=1):
     return data
 
 
-def add_outliers(percentage, k, data):
+def add_outliers(percentage, k, data, step=1000):
     """
     Given a certain percentage of outliers, add new outliers into the data until it reaches the desired percentage
     @param percentage: percentage of outliers that the data should have
@@ -118,7 +118,6 @@ def add_outliers(percentage, k, data):
     data = data.copy()
     indexes = calculate_outliers_indexes(data, k)
     density = calculate_density(indexes)
-    step = 1000
     count = 0
     quantity = int((percentage - density) * len(data))
     print('Quantity:', quantity)
