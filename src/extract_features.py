@@ -191,12 +191,17 @@ def extract_features(data, window_size, fs, step, window_periods):
     """
     physical_dataframes = []
     statistical_dataframes = []
+    activities = data.pop('activity')
+    activities_series = []
     count = 0
     for i in range(window_size, len(data), step):
         physical_dataframes.append(extract_physical_features(data.iloc[i - window_size:i, :], window_periods))
         statistical_dataframes.append(extract_statistical_features(data.iloc[i - window_size:i, :], fs))
+        activities_series.append(activities[i - window_size:i].value_counts().index)
         count += 1
     physical = pd.concat(physical_dataframes)
     statistical = pd.concat(statistical_dataframes)
 
-    return pd.concat([statistical, physical], axis=1)
+    df =  pd.concat([statistical, physical], axis=1)
+    df['activity'] = activities_series
+    return df
