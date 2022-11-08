@@ -197,7 +197,7 @@ def extract_features(data, window_size, fs, step, window_periods):
     for i in range(window_size, len(data), step):
         physical_dataframes.append(extract_physical_features(data.iloc[i - window_size:i, :], window_periods))
         statistical_dataframes.append(extract_statistical_features(data.iloc[i - window_size:i, :], fs))
-        activities_series.append(activities[i - window_size:i].value_counts().index)
+        activities_series.append(activities[i - window_size:i].value_counts().index[0])
         count += 1
     physical = pd.concat(physical_dataframes)
     statistical = pd.concat(statistical_dataframes)
