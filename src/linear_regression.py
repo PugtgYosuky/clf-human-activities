@@ -132,7 +132,7 @@ def predict_in_the_middle(data_all, p, split_index, a_pred, a_post):
     """
     if split_index == len(data_all)-1:
         # predict the last index of the data
-        return predict(data_all[:-1], p, a_prev)
+        return predict(data_all[:-1], p, a_pred)
     if split_index == 0:
         # predict the first index of the data
         return predict(data_all[1:][::-1], a_post)
